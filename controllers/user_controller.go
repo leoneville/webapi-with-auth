@@ -3,6 +3,7 @@ package controllers
 import (
 	"webapi-with-go/database"
 	"webapi-with-go/models"
+	"webapi-with-go/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,6 +21,8 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
+	user.Password = services.SHA256Encoder(user.Password)
+
 	err = db.Create(&user).Error
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -28,5 +31,5 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, user)
+	c.Status(204)
 }
